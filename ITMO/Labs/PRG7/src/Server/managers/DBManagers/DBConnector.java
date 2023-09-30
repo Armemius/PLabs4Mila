@@ -37,7 +37,7 @@ public class DBConnector {
     public void connect() {
         try {
             try {
-                connectBySSH("s368849", "ytLF/2098", "nLSspIG8ue14s0Q5");
+                connectBySSH("s368849", "HELIOS PW", "DB PW");
                 return;
             } catch (JSchException | SQLException e) {
                 System.out.println("Connection by SSH failed");
