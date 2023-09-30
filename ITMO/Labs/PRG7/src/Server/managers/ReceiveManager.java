@@ -21,43 +21,33 @@ public class ReceiveManager {
     }
 
     public Message getMessage() {
-        AtomicReference<Message> message = new AtomicReference<>(null);
+        Message message = null;
 
-        Thread receiveThread = new Thread(() -> {
-            ByteBuffer buffer = ByteBuffer.allocate(20000);
-            try {
-                clientSocketAddress = (SocketAddress) channel.receive(buffer);
-
-                if (clientSocketAddress != null) {
-                    buffer.flip();
-                    // Получаем байты из буфера
-                    byte[] data = new byte[buffer.remaining()];
-                    buffer.get(data);
-                    // Десериализуем данные от клиента
-                    ByteArrayInputStream in = new ByteArrayInputStream(data);
-                    ObjectInputStream oin = new ObjectInputStream(in);
-
-                    Object obj = oin.readObject();
-                    message.set((Message) obj);
-                    oin.close();
-                    System.out.println("Message was received: " + message.get().getCommand());
-
-                    buffer.clear();
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Something bad happened and server didn't handle the message");
-            }
-        });
-
-        receiveThread.start();
-
+        ByteBuffer buffer = ByteBuffer.allocate(20000);
         try {
-            receiveThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            clientSocketAddress = (SocketAddress) channel.receive(buffer);
+
+            if (clientSocketAddress != null) {
+                buffer.flip();
+                // Получаем байты из буфера
+                byte[] data = new byte[buffer.remaining()];
+                buffer.get(data);
+                // Десериализуем данные от клиента
+                ByteArrayInputStream in = new ByteArrayInputStream(data);
+                ObjectInputStream oin = new ObjectInputStream(in);
+
+                Object obj = oin.readObject();
+                message = (Message) obj;
+                oin.close();
+                System.out.println("Message was received: " + message.getCommand());
+
+                buffer.clear();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Something bad happened and server didn't handle the message");
         }
 
-        return message.get();
+        return message;
     }
 
 //    public Message getMessage() {

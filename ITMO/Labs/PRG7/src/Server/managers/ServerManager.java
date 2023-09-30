@@ -9,6 +9,7 @@ import Server.managers.collectionManagers.CollectionManager;
 import Server.managers.collectionManagers.CommandsManager;
 
 import java.io.IOException;
+import java.util.concurrent.*;
 
 public class ServerManager {
     private final Server server;
@@ -19,6 +20,8 @@ public class ServerManager {
     private boolean workingState = true;
     private static UsersManager usersManager;
     private final TableCollectionManager tableCollectionManager;
+    private final ExecutorService fixedThreadPoolExecutor = Executors.newFixedThreadPool(3);
+    private final ForkJoinPool forkJoinPool = new ForkJoinPool(6);
 
     //literally server manager
     public ServerManager(Server server, CollectionManager collectionManager, UsersManager usersManager, TableCollectionManager tableCollectionManager) {
@@ -44,6 +47,7 @@ public class ServerManager {
 
 
             while (workingState) {
+                Thread.onSpinWait();
                 try {
                     handleCommand(commandsManager);
                 } catch (IOException e) {
@@ -59,15 +63,24 @@ public class ServerManager {
 
 
     public void handleCommand(CommandsManager commandsManager) throws IOException {
-        Message message = receiveM.getMessage();
-        commandsManager.execute(message);
-        setConsole(collectionManager.getConsole());
-        sendM.setSocketAddress(receiveM.getSocketAddress());
-        String result = console.getText();
+        new Thread(() -> {
+            Message message = receiveM.getMessage();
+            fixedThreadPoolExecutor.execute(() -> {
+                commandsManager.execute(message);
+                setConsole(collectionManager.getConsole());
+                sendM.setSocketAddress(receiveM.getSocketAddress());
+                String result = console.getText();
+
+                if (!message.getCommand().equals("exit")) {
+                    forkJoinPool.execute(() -> {
+                        sendM.sendMessage(result);
+                    });
+                }
+            });
+        }).start();
+
         //System.out.println(result);
-        if (!message.getCommand().equals("exit")) {
-            sendM.sendMessage(result);
-        }
+
     }
 
     public static Console getConsole() {
