@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -47,8 +46,9 @@ public class ClientManager {
         InputDataManager inputDataManager = new InputDataManager(this);
         AuthManager authManager = new AuthManager(console);
 
-        while(!authManager.auth()){
-            //do nothing
+        while (!authManager.auth()) {
+            Thread.onSpinWait();
+            // do nothing
         }
 
         while (console.isNextStr()) {
@@ -57,7 +57,7 @@ public class ClientManager {
                 String command = console.getNextStr();
                 console.writeStr(SEPARATOR);
                 if (isExecuteScript(command)) {
-                    String[] commands  = command.split("\\s");
+                    String[] commands = command.split("\\s");
                     if (commands.length < 2) {
                         System.out.println("File(s) with script is not provided");
                         console.writeStr(SEPARATOR);
@@ -87,14 +87,14 @@ public class ClientManager {
 
                 if (isUpdate(command)) {
                     Message updMessage = inputDataManager.execute("updateClientIds");
-                    sendManager.sendMessage(updMessage);
-                    String[] ids = receiveManager.getMessage().split("\s");
+                    SendManager.sendMessage(updMessage);
+                    String[] ids = ReceiveManager.getMessage().split("\s");
                     for (String id : ids) {
                         clientIds.add(Integer.parseInt(id));
                     }
                 }
 
-                if (inputDataManager.check(command)){
+                if (inputDataManager.check(command)) {
                     handleCommand(command, inputDataManager);
                     console.writeStr(SEPARATOR);
                 }
@@ -115,8 +115,8 @@ public class ClientManager {
             while (scanner.hasNextLine()) {
                 var buffer = scanner.nextLine();
                 if (!buffer.isBlank()) {
-                    if (buffer.contains("execute_script")){
-                        String[] commands = buffer.split("\s");
+                    if (buffer.contains("execute_script")) {
+                        String[] commands = buffer.split("\\s");
                         executeScript(commands[1], inputDataManager);
                     }
                     handleCommand(buffer, inputDataManager);
@@ -153,12 +153,12 @@ public class ClientManager {
 
     private void handleCommand(String command, InputDataManager inputDataManager) throws IOException {
         Message message = inputDataManager.execute(command);
-        sendManager.sendMessage(message);
-        if (isExit(command)){
+        SendManager.sendMessage(message);
+        if (isExit(command)) {
             client.stop();
             System.exit(0);
         }
-        console.writeStr(receiveManager.getMessage());
+        console.writeStr(ReceiveManager.getMessage());
     }
 
     public boolean isUpdate(String str) {
@@ -167,10 +167,7 @@ public class ClientManager {
         while (matcher.find()) {
             x = String.valueOf(matcher.group());
         }
-        if (x.equals("update")) {
-            return true;
-        }
-        return false;
+        return x.equals("update");
     }
 
     public boolean isExit(String str) {
@@ -179,10 +176,7 @@ public class ClientManager {
         while (matcher.find()) {
             x = String.valueOf(matcher.group());
         }
-        if (x.equals("exit")) {
-            return true;
-        }
-        return false;
+        return x.equals("exit");
     }
 
     public boolean isExecuteScript(String str) {
@@ -191,10 +185,7 @@ public class ClientManager {
         while (matcher.find()) {
             x = String.valueOf(matcher.group());
         }
-        if (x.equals("execute_script")) {
-            return true;
-        }
-        return false;
+        return x.equals("execute_script");
     }
 
     public Client getClient() {

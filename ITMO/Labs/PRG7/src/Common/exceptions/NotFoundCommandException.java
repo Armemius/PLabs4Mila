@@ -1,9 +1,10 @@
 package Common.exceptions;
 
-public class NotFoundCommandException extends Exception{
-    public NotFoundCommandException(){}
+public class NotFoundCommandException extends Exception {
+    public NotFoundCommandException() {}
+
     @Override
-    public String toString (){
+    public String toString() {
         return "The command doesn't exist";
     }
 }

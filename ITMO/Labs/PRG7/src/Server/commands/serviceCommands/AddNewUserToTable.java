@@ -7,7 +7,7 @@ import Server.managers.DBManagers.UsersManager;
 public class AddNewUserToTable extends Command {
 
     private Console console;
-    private UsersManager usersManager;
+    private final UsersManager usersManager;
     public AddNewUserToTable(Console console, UsersManager usersManager){
         super ("add_new_user", "add new user to the table", console);
         this.usersManager = usersManager;

@@ -8,9 +8,9 @@ import Server.managers.DBManagers.TableCollectionManager;
 import Server.managers.collectionManagers.CollectionManager;
 
 public class RemoveLower extends CompoundCommand {
-    private CollectionManager collectionManager;
+    private final CollectionManager collectionManager;
     private SpaceMarine spaceMarine;
-    private TableCollectionManager tableCollectionManager;
+    private final TableCollectionManager tableCollectionManager;
 
     public RemoveLower(CollectionManager collectionManager, Console console, TableCollectionManager tableCollectionManager) {
         super("remove_lower", "remove items from the collection with a lower health value than the specified one", console);

@@ -1,14 +1,8 @@
 package Client.managers.authorizationModule;
 
 import Client.managers.ReceiveManager;
-import Client.managers.TypeCheckingManager;
 import Common.consoles.Console;
-import Common.exceptions.EndInputException;
-import Common.exceptions.StopInputException;
 import Common.utils.Message;
-import Server.managers.SendManager;
-
-import javax.swing.*;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -27,7 +21,7 @@ public class AuthManager {
 
     public AuthManager(Console console) {
         this.console = console;
-        this.id = 0;
+        id = 0;
         this.username = "";
         this.password = "";
     }
@@ -80,7 +74,7 @@ public class AuthManager {
     public boolean checkUserPass(String user, String pass) {
         try {
             Message mess = new Message();
-            mess.setCommand("check_user_pass " + user +" "+ pass);
+            mess.setCommand("check_user_pass " + user + " " + pass);
             sendMessage(mess);
             return Boolean.parseBoolean(ReceiveManager.getMessage());
         } catch (IOException e) {
@@ -114,12 +108,11 @@ public class AuthManager {
                 console.writeStr(SEPARATOR);
                 console.writeStr("Wrong password");
 
-                if (attempts == 0){
+                if (attempts == 0) {
                     console.writeStr(SEPARATOR);
                     console.writeStr("Could not log in to your account. Try again or create a new account");
 
-                }
-                else {
+                } else {
                     console.writeStr(SEPARATOR);
                     console.writeStr("Enter password (attempts left " + attempts + "):");
                     console.writeStr(SEPARATOR);
@@ -155,24 +148,25 @@ public class AuthManager {
     }
 
 
-    public void setUsername(String username){
+    public void setUsername(String username) {
         this.username = username;
     }
-    public void setPassword(String password){
+
+    public void setPassword(String password) {
         this.password = password;
     }
 
     public void getUserId() throws IOException {
         Message mess = new Message();
 //        System.out.println(username);
-        mess.setCommand("get_user_id "+ username);
+        mess.setCommand("get_user_id " + username);
         sendMessage(mess);
-        this.id = Integer.parseInt(ReceiveManager.getMessage());
+        id = Integer.parseInt(ReceiveManager.getMessage());
     }
 
     public void sendUser() throws IOException {
         Message mess = new Message();
-        mess.setCommand("add_new_user " + username +" "+ password);
+        mess.setCommand("add_new_user " + username + " " + password);
         sendMessage(mess);
         console.writeStr(SEPARATOR);
         console.writeStr(ReceiveManager.getMessage());

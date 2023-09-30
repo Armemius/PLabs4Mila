@@ -9,10 +9,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class SpaceMarine implements Serializable {
-    public SpaceMarine(){}
+    public SpaceMarine() {}
+
     public static Set<Integer> ids = new TreeSet<>();
 
-    public SpaceMarine(String name, Coordinates coordinates, float health, Long heartCount, boolean loyal, MeleeWeapon meleeWeapon, Chapter chapter ) {
+    public SpaceMarine(String name, Coordinates coordinates, float health, Long heartCount, boolean loyal, MeleeWeapon meleeWeapon, Chapter chapter) {
         //auto-generation
         creationDate = java.time.ZonedDateTime.now();
         //auto-generation
@@ -53,34 +54,40 @@ public class SpaceMarine implements Serializable {
     public java.time.ZonedDateTime getCreationDate() {
         return creationDate;
     }
-    public void setCreationDate (java.time.ZonedDateTime creationDate){
+
+    public void setCreationDate(java.time.ZonedDateTime creationDate) {
         this.creationDate = creationDate;
     }
-    public int getId(){
+
+    public int getId() {
         return id;
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
-    public void setName(String name){
+
+    public void setName(String name) {
         try {
-            if (name == null || name == "") {
+            if (name == null || name.equals("")) {
                 throw new WrongArgumentsException("Name can't be null or empty string");
             }
             this.name = name;
-        } catch (WrongArgumentsException e) {
-
-        }
+        } catch (WrongArgumentsException ignore) {}
     }
+
     public Coordinates getCoordinates() {
         return coordinates;
     }
-    public void setCoordinates(Coordinates coordinates){
+
+    public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
     }
-    public float getHealth(){
+
+    public float getHealth() {
         return health;
     }
+
     public void setHealth(float health) {
         this.health = health;
     }
@@ -92,6 +99,7 @@ public class SpaceMarine implements Serializable {
     public void setHeartCount(Long heartCount) {
         this.heartCount = heartCount;
     }
+
     public boolean isLoyal() {
         return loyal;
     }
@@ -115,28 +123,26 @@ public class SpaceMarine implements Serializable {
     public void setChapter(Chapter chapter) {
         this.chapter = chapter;
     }
-    public void setId(Integer id){
+
+    public void setId(Integer id) {
         this.id = id;
     }
 
 
-
-
-
-
-    public boolean argsCheckSpaceMarine(){
+    public boolean argsCheckSpaceMarine() {
         return coordinates.argsCheckCoordinates()
                 && chapter.argsCheckChapter()
-                && name != null && name != "\\s*" && creationDate != null
+                && name != null && !name.equals("\\s*") && creationDate != null
                 && health > 0 && heartCount != null && heartCount > 0
                 && heartCount <= 3 && meleeWeapon != null;
     }
 
     /**
      * Updater for collection elements
-     * @param spaceMarine
+     *
+     * @param spaceMarine The space marine
      */
-    public void updateSpaceMarine (SpaceMarine spaceMarine){
+    public void updateSpaceMarine(SpaceMarine spaceMarine) {
         setName(spaceMarine.getName());
         setCoordinates(spaceMarine.getCoordinates());
         setHealth(spaceMarine.getHealth());
@@ -153,6 +159,7 @@ public class SpaceMarine implements Serializable {
             return new Coordinates.CooordiantesComparator().compare(sm1.getCoordinates(), sm2.getCoordinates());
         }
     }
+
     public static class SpaceMarineHealthComparator implements Comparator<SpaceMarine> {
         @Override
         public int compare(SpaceMarine sm1, SpaceMarine sm2) {
@@ -175,7 +182,6 @@ public class SpaceMarine implements Serializable {
                 "creationDate=" + creationDate +
                 '}';
     }
-
 
 
     @Override

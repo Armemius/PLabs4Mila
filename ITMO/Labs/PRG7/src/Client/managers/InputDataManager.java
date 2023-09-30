@@ -13,12 +13,11 @@ import java.util.List;
 import static Client.managers.TypeCheckingManager.isInteger;
 
 public class InputDataManager {
-    private Console console;
-    private String endInput = "end";
-    private SpaceMarineManager spaceMarineManager;
-    private List<String> listOfAvailableCommands = new ArrayList<String>();
-    private List<String> listOfCompoundCommands = new ArrayList<String>();
-    private List<String> listOfNoArgsCommands = new ArrayList<String>();
+    private final Console console;
+    private final SpaceMarineManager spaceMarineManager;
+    private final List<String> listOfAvailableCommands = new ArrayList<>();
+    private final List<String> listOfCompoundCommands = new ArrayList<>();
+    private final List<String> listOfNoArgsCommands = new ArrayList<>();
 
 
 
@@ -64,9 +63,7 @@ public class InputDataManager {
         String[] tmp = command.split("\\s+");
         command = tmp[0];
         String[] arguments = new String[tmp.length - 1];
-        for (int i = 1; i < tmp.length; i++) {
-            arguments[i - 1] = tmp[i];
-        }
+        System.arraycopy(tmp, 1, arguments, 0, tmp.length - 1);
         try {
             if (!listOfAvailableCommands.contains(command)) {
                 throw new NotFoundCommandException();
@@ -142,9 +139,7 @@ public class InputDataManager {
         String[] tmp = command.split("\\s+");
         command = tmp[0];
         String[] arguments = new String[tmp.length - 1];
-        for (int i = 1; i < tmp.length; i++) {
-            arguments[i - 1] = tmp[i];
-        }
+        System.arraycopy(tmp, 1, arguments, 0, tmp.length - 1);
         try {
             if (listOfCompoundCommands.contains(command)){
                 SpaceMarine spaceMarine = spaceMarineManager.getSpaceMarine();

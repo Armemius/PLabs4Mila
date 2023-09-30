@@ -1,7 +1,8 @@
 package Common.consoles;
 
-public class ServerConsole implements Console{
+public class ServerConsole implements Console {
     private String text = "";
+
     @Override
     public boolean isNextStr() {
         return false;
@@ -14,10 +15,11 @@ public class ServerConsole implements Console{
 
     @Override
     public void writeStr(String result) {
-        text += result+"\n";
+        text += result + "\n";
     }
+
     //get 1 command message and clean "buffer"
-    public String getText(){
+    public String getText() {
         String tmp = text;
         text = "";
         return tmp.strip();

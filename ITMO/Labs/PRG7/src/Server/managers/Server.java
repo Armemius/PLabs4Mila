@@ -6,11 +6,14 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 
 public class Server {
-    public Server(){}
-    public Server(int port){
+    public Server() {
+    }
+
+    public Server(int port) {
         inetSocketAddress = new InetSocketAddress(port);
     }
-    private InetSocketAddress  inetSocketAddress;
+
+    private InetSocketAddress inetSocketAddress;
     private DatagramChannel datagramChannel;
     protected ByteBuffer buffer;
 
@@ -21,7 +24,7 @@ public class Server {
         buffer = ByteBuffer.allocate(4096);
     }
 
-    public DatagramChannel getDatagramChannel(){
+    public DatagramChannel getDatagramChannel() {
         return datagramChannel;
     }
 

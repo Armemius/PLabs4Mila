@@ -18,10 +18,10 @@ public class SendManager {
     private static Console console;
 
     public SendManager(DatagramSocket socket, InetAddress address, int port, Console console){
-        this.port = port;
-        this.socket = socket;
-        this.address = address;
-        this.console = console;
+        SendManager.port = port;
+        SendManager.socket = socket;
+        SendManager.address = address;
+        SendManager.console = console;
     }
 
     public static void sendMessage(Message message) throws IOException {
@@ -29,8 +29,7 @@ public class SendManager {
             message.setUser_id(AuthManager.id);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ObjectOutputStream oOut = new ObjectOutputStream(out);
-            Object obj = message;
-            oOut.writeObject(obj);
+            oOut.writeObject(message);
             oOut.flush();
 
             byte[] data = out.toByteArray();

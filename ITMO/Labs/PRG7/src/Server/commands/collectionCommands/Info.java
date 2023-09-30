@@ -6,7 +6,7 @@ import Common.exceptions.WrongArgumentsException;
 import Server.managers.collectionManagers.CollectionManager;
 
 public class Info extends Command {
-    private CollectionManager collectionManager;
+    private final CollectionManager collectionManager;
 
     public Info (CollectionManager collectionManager, Console console){
         super ("info", "collection information output ", console);

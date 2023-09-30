@@ -6,7 +6,7 @@ import Common.exceptions.WrongArgumentsException;
 import Server.managers.collectionManagers.CollectionManager;
 
 public class Show extends Command {
-    private CollectionManager collectionManager;
+    private final CollectionManager collectionManager;
 
     public Show(CollectionManager collectionManager, Console console) {
         super("show", "collection items output", console);
@@ -21,7 +21,7 @@ public class Show extends Command {
             }
             collectionManager.printCollection();
         } catch (WrongArgumentsException e) {
-            console.writeStr(e.toString() + ": show command doesn't need additional arguments");
+            console.writeStr(e + ": show command doesn't need additional arguments");
         }
     }
 }

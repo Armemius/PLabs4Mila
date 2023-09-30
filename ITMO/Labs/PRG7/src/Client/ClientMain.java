@@ -15,7 +15,7 @@ public class ClientMain {
         BaseConsole console = new BaseConsole();
         Client client = new Client();
 
-        ClientManager clientManager = null;
+        ClientManager clientManager;
         try {
             InetAddress inetAddress = InetAddress.getByName("localhost");
             clientManager = new ClientManager(client, console, inetAddress);

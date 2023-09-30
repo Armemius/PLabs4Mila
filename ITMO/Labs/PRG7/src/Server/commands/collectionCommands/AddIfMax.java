@@ -8,9 +8,9 @@ import Server.managers.DBManagers.TableCollectionManager;
 import Server.managers.collectionManagers.CollectionManager;
 
 public class AddIfMax extends CompoundCommand {
-    private CollectionManager collectionManager;
+    private final CollectionManager collectionManager;
     private SpaceMarine spaceMarine;
-    private TableCollectionManager tableCollectionManager;
+    private final TableCollectionManager tableCollectionManager;
 
     public AddIfMax (CollectionManager collectionManager, Console console, TableCollectionManager tableCollectionManager){
         super ("add_if_max", "adds a new item to the collection if its health field is greater than the maximum " +

@@ -6,11 +6,11 @@ import Server.managers.DBManagers.TableCollectionManager;
 import Server.managers.collectionManagers.CollectionManager;
 
 public class UpdateClientIds extends Command {
-    private CollectionManager collectionManager;
-    private TableCollectionManager tableCollectionManager;
+    private final CollectionManager collectionManager;
+    private final TableCollectionManager tableCollectionManager;
 
-    public UpdateClientIds(Console console, CollectionManager collectionManager, TableCollectionManager tableCollectionManager){
-        super ("updateClientIds", "update ids set on the com.lunghr.lab6.client module", console);
+    public UpdateClientIds(Console console, CollectionManager collectionManager, TableCollectionManager tableCollectionManager) {
+        super("updateClientIds", "update ids set on the com.lunghr.lab6.client module", console);
         this.collectionManager = collectionManager;
         this.console = console;
         this.tableCollectionManager = tableCollectionManager;

@@ -13,32 +13,36 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SpaceMarineManager {
-    private Console console;
-    private String endInput = "end";
+    private final Console console;
+    private final String END_INPUT = "end";
 
-    public SpaceMarineManager(Console console){
+    public SpaceMarineManager(Console console) {
         this.console = console;
 
     }
-    public Long getLong (String helpText, int conditionCheck) throws StopInputException, EndInputException {
+
+    public Long getLong(String helpText, int conditionCheck) throws StopInputException, EndInputException {
         String strX;
         Long x;
         console.writeStr(helpText);
         while (console.isNextStr()) {
             strX = console.getNextStr();
-            if (strX.equals(endInput)){
+            if (strX.equals(END_INPUT)) {
                 throw new EndInputException();
             }
-            if (TypeCheckingManager.isLong(strX)){
+            if (TypeCheckingManager.isLong(strX)) {
                 x = Long.parseLong(strX);
-                if ((x > 0 && x<=3) || (conditionCheck==1)) return x;
-            }console.writeStr(helpText);
+                if ((x > 0 && x <= 3) || (conditionCheck == 1)) return x;
+            }
+            console.writeStr(helpText);
 
-        }throw new StopInputException();
+        }
+        throw new StopInputException();
     }
 
     /**
      * String to Float parser
+     *
      * @param helpText
      * @return
      * @throws StopInputException
@@ -51,38 +55,41 @@ public class SpaceMarineManager {
         console.writeStr(helpText);
         while (console.isNextStr()) {
             strX = console.getNextStr();
-            if (strX.equals(endInput)){
+            if (strX.equals(END_INPUT)) {
                 throw new EndInputException();
             }
-            if (TypeCheckingManager.isFloat(strX)){
-                if (strX.contains(String.valueOf(","))){
+            if (TypeCheckingManager.isFloat(strX)) {
+                if (strX.contains(String.valueOf(","))) {
                     strX = strX.replace(",", ".");
                 }
                 x = Float.parseFloat(strX);
                 if (x > 0) return x;
-            }console.writeStr(helpText);
+            }
+            console.writeStr(helpText);
 
-        }throw new StopInputException();
+        }
+        throw new StopInputException();
     }
 
     /**
      * String to Double parser
+     *
      * @param helpText
      * @return
      * @throws StopInputException
      * @throws EndInputException
      */
-    public Double getDouble (String helpText) throws StopInputException, EndInputException {
+    public Double getDouble(String helpText) throws StopInputException, EndInputException {
         String strX;
         Double x;
         console.writeStr(helpText);
         while (console.isNextStr()) {
             strX = console.getNextStr();
-            if (strX.equals(endInput)) {
+            if (strX.equals(END_INPUT)) {
                 throw new EndInputException();
             }
             if (TypeCheckingManager.isDouble(strX)) {
-                if (strX.contains(String.valueOf(","))){
+                if (strX.contains(String.valueOf(","))) {
                     strX = strX.replace(",", ".");
                 }
                 x = Double.parseDouble(strX);
@@ -95,22 +102,23 @@ public class SpaceMarineManager {
 
     /**
      * String getter
+     *
      * @param helpText
      * @param conditionCheck - if 1 - value can't be null  and empty, if 0 - string can be empty
      * @return
      * @throws EndInputException
      * @throws StopInputException
      */
-    public String getString (String helpText, int conditionCheck) throws EndInputException, StopInputException{
+    public String getString(String helpText, int conditionCheck) throws EndInputException, StopInputException {
         String strX;
         console.writeStr(helpText);
         while (console.isNextStr()) {
             strX = console.getNextStr();
-            if (strX.equals(endInput)) {
+            if (strX.equals(END_INPUT)) {
                 throw new EndInputException();
             }
-            if (!strX.isEmpty() && conditionCheck == 0 && (strX.equals("\"\"") || strX != null||strX.equals("\'\'") )){
-                if(strX.equals("\"\"") || strX.equals("\'\'")) return "";
+            if (!strX.isEmpty() && conditionCheck == 0 && (strX.equals("\"\"") || strX != null || strX.equals("\'\'"))) {
+                if (strX.equals("\"\"") || strX.equals("\'\'")) return "";
                 return strX;
             }
             if (strX != null && !strX.isEmpty() && !strX.equals("\"\"") && !strX.equals("\'\'") && conditionCheck == 1) {
@@ -123,64 +131,67 @@ public class SpaceMarineManager {
 
     /**
      * String to MeleeWeapon parser (enum)
+     *
      * @return
      * @throws EndInputException
      * @throws StopInputException
      */
-    public MeleeWeapon getMeleeweapon () throws EndInputException, StopInputException {
-        String strX ;
+    public MeleeWeapon getMeleeweapon() throws EndInputException, StopInputException {
+        String strX;
         MeleeWeapon x;
         Integer tmp;
         List<String> strMeleeWeapon = new ArrayList<>(Arrays.asList("CHAIN_SWORD", "POWER_SWORD", "LIGHTING_CLAW", "POWER_BLADE"));
         String helpText = "Enter the melee weapon value from the list below or enter the number";
         console.writeStr(helpText);
         int counter = 0;
-        for (MeleeWeapon meleeWeapon : MeleeWeapon.values()){
-            counter +=1;
-            console.writeStr(counter +"-"+meleeWeapon.toString());
+        for (MeleeWeapon meleeWeapon : MeleeWeapon.values()) {
+            counter += 1;
+            console.writeStr(counter + "-" + meleeWeapon.toString());
         }
         while (console.isNextStr()) {
             strX = console.getNextStr();
-            if (strX.equals(endInput)) {
+            if (strX.equals(END_INPUT)) {
                 throw new EndInputException();
             }
             if (TypeCheckingManager.isMeleeWeapon(strX)) {
                 x = Enum.valueOf(MeleeWeapon.class, strX);
                 return x;
             }
-            if (TypeCheckingManager.isInteger(strX)){
+            if (TypeCheckingManager.isInteger(strX)) {
                 tmp = Integer.parseInt(strX);
-                if (!(tmp >= 1 && tmp <= 4)){
+                if (!(tmp >= 1 && tmp <= 4)) {
                     console.writeStr("Index out of range: enter a number from 1 to 4");
-                }else{
-                    x = Enum.valueOf(MeleeWeapon.class, strMeleeWeapon.get(tmp-1));
+                } else {
+                    x = Enum.valueOf(MeleeWeapon.class, strMeleeWeapon.get(tmp - 1));
                     return x;
                 }
             }
             console.writeStr(helpText);
-            for (MeleeWeapon meleeWeapon : MeleeWeapon.values()){
+            for (MeleeWeapon meleeWeapon : MeleeWeapon.values()) {
                 console.writeStr(meleeWeapon.toString());
             }
-        } throw new StopInputException();
+        }
+        throw new StopInputException();
     }
 
     /**
      * String to Boolean parser
+     *
      * @return
      * @throws EndInputException
      * @throws StopInputException
      */
-    public boolean getLoyal () throws EndInputException, StopInputException {
+    public boolean getLoyal() throws EndInputException, StopInputException {
         String helpText = "Enter a loyal configuration (true or false)";
         console.writeStr(helpText);
         String str;
         Boolean x;
-        while (console.isNextStr()){
+        while (console.isNextStr()) {
             str = console.getNextStr();
-            if (str.equals(endInput)) {
+            if (str.equals(END_INPUT)) {
                 throw new EndInputException();
             }
-            if (TypeCheckingManager.isBoolean(str)){
+            if (TypeCheckingManager.isBoolean(str)) {
                 x = Boolean.parseBoolean(str);
                 return x;
             }
@@ -191,6 +202,7 @@ public class SpaceMarineManager {
 
     /**
      * New input SpaceMarine getter
+     *
      * @return
      * @throws StopInputException
      * @throws EndInputException
@@ -234,7 +246,7 @@ public class SpaceMarineManager {
             Boolean loyal = getLoyal();
             console.writeStr("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" +
                     "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            SpaceMarine spaceMarine = new SpaceMarine(name, coordinates, health, heartCount,loyal,meleeWeapon, chapter);
+            SpaceMarine spaceMarine = new SpaceMarine(name, coordinates, health, heartCount, loyal, meleeWeapon, chapter);
             return spaceMarine;
         } catch (StopInputException | EndInputException e) {
             return null;

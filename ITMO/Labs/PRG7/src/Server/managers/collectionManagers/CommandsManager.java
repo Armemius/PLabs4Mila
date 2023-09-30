@@ -3,11 +3,9 @@ package Server.managers.collectionManagers;
 import Common.commands.Command;
 import Common.commands.CompoundCommand;
 import Common.consoles.Console;
-import Common.consoles.ServerConsole;
 import Common.exceptions.NotFoundCommandException;
 import Common.models.SpaceMarine;
 import Common.utils.Message;
-import Server.commands.RemoveById;
 import Server.commands.UpdateClientIds;
 import Server.commands.collectionCommands.*;
 import Server.commands.serviceCommands.AddNewUserToTable;
@@ -17,27 +15,26 @@ import Server.commands.serviceCommands.GetUserId;
 import Server.managers.DBManagers.TableCollectionManager;
 import Server.managers.DBManagers.UsersManager;
 
-import java.util.HashSet;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static java.util.Collections.max;
 
 public class CommandsManager {
 
-    private Console console;
-    private CollectionManager collectionManager;
-    private LinkedHashMap<String, Command> listOfCommands = new LinkedHashMap<>();
+    private final Console console;
+    private final CollectionManager collectionManager;
+    private final LinkedHashMap<String, Command> listOfCommands = new LinkedHashMap<>();
     public static List<String> history = new ArrayList<>();
-    private List<String> serviceCommands = new ArrayList<>();
-    private UsersManager usersManager;
-    private TableCollectionManager tableCollectionManager;
+    private final List<String> serviceCommands = new ArrayList<>();
+    private final UsersManager usersManager;
+    private final TableCollectionManager tableCollectionManager;
     public static ExecutorService threadPool;
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private static HashSet<SpaceMarine> fileCollection;
@@ -49,7 +46,7 @@ public class CommandsManager {
         this.console = console;
         this.usersManager = usersManager;
         this.tableCollectionManager = tableCollectionManager;
-        this.threadPool = Executors.newFixedThreadPool(4);
+        threadPool = Executors.newFixedThreadPool(4);
 
         Command[] commandsList = {new Show(collectionManager, console), new CheckUser(console, usersManager, this),
                 new CheckUserPass(console, usersManager), new AddNewUserToTable(console, usersManager),
@@ -100,9 +97,7 @@ public class CommandsManager {
         String tmpCommand = tmp[0];
 //        System.out.println(tmpCommand);
         String[] arguments = new String[tmp.length];
-        for (int i = 1; i < tmp.length; i++) {
-            arguments[i - 1] = tmp[i];
-        }
+        System.arraycopy(tmp, 1, arguments, 0, tmp.length - 1);
         arguments[tmp.length - 1] = String.valueOf((message.getUser_id()));
         SpaceMarine spaceMarine = message.getSpaceMarine();
         try {
@@ -172,7 +167,7 @@ public class CommandsManager {
 //        });
 //    }
 
-    public Console getConsole(){
+    public Console getConsole() {
         return console;
     }
 }

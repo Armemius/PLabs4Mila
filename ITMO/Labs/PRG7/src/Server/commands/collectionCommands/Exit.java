@@ -5,8 +5,8 @@ import Common.consoles.Console;
 
 public class Exit extends Command {
 
-    public Exit (Console console){
-        super ("exit", "end the program", console);
+    public Exit(Console console) {
+        super("exit", "end the program", console);
     }
 
     @Override

@@ -11,7 +11,7 @@ import static Server.managers.collectionManagers.CommandsManager.history;
 
 public class CollectionManager {
     private ServerConsole console;
-    private LocalDateTime creationDate;
+    private final LocalDateTime creationDate;
     private static HashSet<SpaceMarine> fileCollection;
 
     public CollectionManager() {
@@ -27,14 +27,16 @@ public class CollectionManager {
         this.console = console;
 
     }
-    public void setConsole(Console console){
+
+    public void setConsole(Console console) {
         this.console = (ServerConsole) console;
     }
 
 
     /**
      * Collection setter
-     * @param spaceMarines
+     *
+     * @param spaceMarines The space marines
      */
     public HashSet<SpaceMarine> setCollection(HashSet<SpaceMarine> spaceMarines) {
         fileCollection = spaceMarines;
@@ -46,13 +48,12 @@ public class CollectionManager {
 
     /**
      * Updating an element with the specified id
-     * @param id
-     * @param spaceMarine
+     *
+     * @param id The id
+     * @param spaceMarine The space marine
      */
     public void updateCollectionElement(int id, SpaceMarine spaceMarine) {
-        Iterator<SpaceMarine> iterator = fileCollection.iterator();
-        while (iterator.hasNext()) {
-            SpaceMarine sm = iterator.next();
+        for (SpaceMarine sm : fileCollection) {
             if (sm.getId() == id) {
                 sm.updateSpaceMarine(spaceMarine);
                 console.writeStr(spaceMarine.getName() + " with id = " + id + " has been updated");
@@ -75,7 +76,7 @@ public class CollectionManager {
             console.writeStr("Collection is empty");
         }
         for (SpaceMarine spaceMarine : fileCollection) {
-           // System.out.println(spaceMarine.toString());
+            // System.out.println(spaceMarine.toString());
             console.writeStr(spaceMarine.toString());
 
         }
@@ -109,7 +110,7 @@ public class CollectionManager {
      */
     public void printSortedHealthFields() {
         ArrayList<SpaceMarine> tmp = new ArrayList<>(fileCollection);
-        Collections.sort(tmp, new SpaceMarine.SpaceMarineHealthComparator());
+        tmp.sort(new SpaceMarine.SpaceMarineHealthComparator());
         for (int i = tmp.size() - 1; i > -1; i--) {
             console.writeStr(String.valueOf(tmp.get(i).getHealth()));
         }
@@ -131,6 +132,7 @@ public class CollectionManager {
 
     /**
      * Deletes collection elements with health values less than the entered item
+     *
      * @param spaceMarine
      */
     public void removeLowerHealth(SpaceMarine spaceMarine) {
@@ -149,13 +151,13 @@ public class CollectionManager {
     /**
      * Displaying information about the collection
      */
-    public void getInfo (){
-        console.writeStr("Collection type: "+fileCollection.getClass().getName());
-        console.writeStr("Creation date: "+ creationDate);
-        console.writeStr("Collection size: "+ fileCollection.size());
+    public void getInfo() {
+        console.writeStr("Collection type: " + fileCollection.getClass().getName());
+        console.writeStr("Creation date: " + creationDate);
+        console.writeStr("Collection size: " + fileCollection.size());
     }
 
-    public ServerConsole getConsole(){
+    public ServerConsole getConsole() {
         return console;
     }
 }

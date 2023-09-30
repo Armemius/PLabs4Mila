@@ -14,20 +14,19 @@ public class SendManager {
     private SocketAddress socketAddress;
     private ByteBuffer buffer;
 
-    private DatagramChannel channel;
+    private final DatagramChannel channel;
     private static final int FRAGMENT_SIZE = 65507;
 
-    public SendManager( DatagramChannel channel){
+    public SendManager(DatagramChannel channel) {
         this.channel = channel;
         this.buffer = ByteBuffer.allocate(1024);
     }
 
-    public void sendMessage(String message) throws IOException {
+    public void sendMessage(String message) {
         try {
-            String response = message;
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ObjectOutputStream oOut = new ObjectOutputStream(out);
-            oOut.writeObject(response);
+            oOut.writeObject(message);
             oOut.flush();
 
             byte[] responseData = out.toByteArray();
@@ -41,7 +40,7 @@ public class SendManager {
                 ByteBuffer responseBuffer = ByteBuffer.wrap(fragment);
                 channel.send(responseBuffer, socketAddress);
             }
-            System.out.println("Answer was sent: "+message);
+            System.out.println("Answer was sent: " + message);
 
             oOut.close();
         } catch (IOException e) {
@@ -50,7 +49,7 @@ public class SendManager {
     }
 
 
-    public void setSocketAddress(SocketAddress socketAddress){
+    public void setSocketAddress(SocketAddress socketAddress) {
         this.socketAddress = socketAddress;
 
     }

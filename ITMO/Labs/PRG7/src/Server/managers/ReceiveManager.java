@@ -12,15 +12,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ReceiveManager {
     private SocketAddress clientSocketAddress;
-    private DatagramChannel channel;
+    private final DatagramChannel channel;
     private ByteBuffer buffer;
     private byte[] bufferSize;
 
-    public ReceiveManager(DatagramChannel channel){
+    public ReceiveManager(DatagramChannel channel) {
         this.channel = channel;
     }
 
-    public Message getMessage(){
+    public Message getMessage() {
         AtomicReference<Message> message = new AtomicReference<>(null);
 
         Thread receiveThread = new Thread(() -> {
@@ -94,7 +94,7 @@ public class ReceiveManager {
 //        return null;
 //    }
 
-    public SocketAddress getSocketAddress(){
+    public SocketAddress getSocketAddress() {
         return clientSocketAddress;
     }
 }

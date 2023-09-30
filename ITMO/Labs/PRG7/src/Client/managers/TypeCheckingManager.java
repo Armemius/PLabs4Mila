@@ -6,72 +6,63 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 
 public class TypeCheckingManager {
-    public TypeCheckingManager(){};
+    public TypeCheckingManager() {}
 
-    public static boolean isMeleeWeapon (String string){
-        MeleeWeapon tmp;
-        try{
-            tmp = Enum.valueOf(MeleeWeapon.class, string);
-        }catch (IllegalArgumentException e) {
+    public static boolean isMeleeWeapon(String string) {
+        try {
+            Enum.valueOf(MeleeWeapon.class, string);
+        } catch (IllegalArgumentException e) {
             return false;
         }
         return true;
     }
 
-    public static boolean isInteger(String string){
-        Integer tmp;
+    public static boolean isInteger(String string) {
         try {
-            tmp = Integer.parseInt(string);
-        }catch (NumberFormatException e){
+            Integer.parseInt(string);
+        } catch (NumberFormatException e) {
             return false;
-        }return true;
+        }
+        return true;
     }
 
-    public static boolean isDouble(String string){
-        double tmp;
+    public static boolean isDouble(String string) {
         try {
-            if (string.contains(String.valueOf(","))){
-                string = string.replace(",", ".");
-            }
-            tmp = Double.parseDouble(string);
-        }catch (NumberFormatException e){
+            Double.parseDouble(string.replace(",", "."));
+        } catch (NumberFormatException e) {
             return false;
-        }return true;
+        }
+        return true;
     }
 
-    public static boolean isLong(String string){
-        long tmp;
+    public static boolean isLong(String string) {
         try {
-            tmp = Long.parseLong(string);
-        }catch (NumberFormatException e){
+            Long.parseLong(string);
+        } catch (NumberFormatException e) {
             return false;
-        }return true;
+        }
+        return true;
     }
 
-    public static boolean isFloat(String string){
-        float tmp;
+    public static boolean isFloat(String string) {
         try {
-            if (string.contains(String.valueOf(","))){
-                string = string.replace(",", ".");
-            }
-            tmp = Float.parseFloat(string);
-        }catch (NumberFormatException e){
+            Float.parseFloat(string.replace(",", "."));
+        } catch (NumberFormatException e) {
             return false;
-        }return true;
+        }
+        return true;
     }
 
-    public static boolean isBoolean(String string){
-        if (string.equals("true") || string.equals("false")){
-            return true;
-        }return false;
+    public static boolean isBoolean(String string) {
+        return string.equals("true") || string.equals("false");
     }
 
-    public static boolean isZoneDateTime (String string){
-        ZonedDateTime tmp;
-        try{
-            tmp = ZonedDateTime.parse(string);
-        }catch (DateTimeParseException e){
+    public static boolean isZoneDateTime(String string) {
+        try {
+            ZonedDateTime.parse(string); // Kinda sus
+        } catch (DateTimeParseException e) {
             return false;
-        }return true;
+        }
+        return true;
     }
 }

@@ -10,9 +10,10 @@ import java.util.regex.Pattern;
 
 public class Coordinates implements Serializable {
     public Coordinates() {}
+
     public Coordinates(long x, double y) {
         this.x = x;
-        this.y = y;//can't be null, <= 47
+        this.y = y; //can't be null, <= 47
     }
 
     private Long x;
@@ -25,8 +26,9 @@ public class Coordinates implements Serializable {
 
     /**
      * Long X matcher from input string (for file collection downloading)
-     * @param string
-     * @return
+     *
+     * @param string Input value
+     * @return The matcher value
      */
     public static String matchX(String string) {
         Matcher matcher = Pattern.compile("\\d+").matcher(string);
@@ -36,6 +38,7 @@ public class Coordinates implements Serializable {
         }
         return x;
     }
+
     public void setX(long x) {
         this.x = x;
     }
@@ -46,8 +49,9 @@ public class Coordinates implements Serializable {
 
     /**
      * Double Y matcher from string (for file collection downloading)
-     * @param string
-     * @return
+     *
+     * @param string Input value
+     * @return Output value
      */
     public static String matchY(String string) {
         Matcher matcher = Pattern.compile("\\d+\\.\\d+").matcher(string);
@@ -57,19 +61,20 @@ public class Coordinates implements Serializable {
         }
         return y;
     }
+
     public void setY(double y) {
-        try{
-            if (y > 47){
+        try {
+            if (y > 47) {
                 throw new WrongArgumentsException("Y coordinate can't be more than 47!");
             }
             this.y = y;
-        }catch (WrongArgumentsException e){
+        } catch (WrongArgumentsException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public boolean argsCheckCoordinates(){
-        return x != null && y != null && y<=47;
+    public boolean argsCheckCoordinates() {
+        return x != null && y != null && y <= 47;
     }
 
     public static class CooordiantesComparator implements Comparator<Coordinates> {
@@ -96,7 +101,7 @@ public class Coordinates implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Coordinates that = (Coordinates) o;
-        return x == that.x && Double.compare(that.y, y) == 0;
+        return Objects.equals(x, that.x) && Double.compare(that.y, y) == 0;
     }
 
     @Override

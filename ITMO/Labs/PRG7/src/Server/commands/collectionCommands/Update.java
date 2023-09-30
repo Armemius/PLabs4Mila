@@ -8,8 +8,8 @@ import Server.managers.collectionManagers.CollectionManager;
 
 public class Update extends CompoundCommand {
     private SpaceMarine spaceMarine;
-    private CollectionManager collectionManager;
-    private TableCollectionManager tableCollectionManager;
+    private final CollectionManager collectionManager;
+    private final TableCollectionManager tableCollectionManager;
 
 
     public Update(CollectionManager collectionManager, Console console, TableCollectionManager tableCollectionManager) {

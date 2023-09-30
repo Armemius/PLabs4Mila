@@ -17,18 +17,19 @@ import java.util.HashSet;
 import static Common.models.SpaceMarine.ids;
 
 public class TableCollectionManager {
-    private Connection connection;
+    private final Connection connection;
     private Console console;
 
-    public TableCollectionManager (Connection connection, Console console){
+    public TableCollectionManager(Connection connection, Console console) {
         this.connection = connection;
         this.console = console;
     }
+
     //insert SpaceMarine object
-    public void insertSpaceMarine(SpaceMarine spaceMarine, int user_id){
+    public void insertSpaceMarine(SpaceMarine spaceMarine, int user_id) {
         PreparedStatement statement;
-        try{
-            String stm = "INSERT INTO  collection"+
+        try {
+            String stm = "INSERT INTO  collection" +
                     " (name,x, y, health, heartCount,loyal, meleeweapon," +
                     "chapter_name, chapter_world, creationDate, user_id) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
@@ -50,24 +51,24 @@ public class TableCollectionManager {
             System.out.println("Object inserted");
 
 
-        }catch (Exception e){
-            System.out.println("Object not inserted: "+ e);
+        } catch (Exception e) {
+            System.out.println("Object not inserted: " + e);
         }
 
     }
 
     //get SpaceMarine object
-//HashSet<SpaceMarine>
-    public HashSet<SpaceMarine> readSpaceMarines(){
+    //HashSet<SpaceMarine>
+    public HashSet<SpaceMarine> readSpaceMarines() {
         PreparedStatement statement;
         ResultSet sp = null;
         int count = 0;
         HashSet<SpaceMarine> spaceMarines = new HashSet<SpaceMarine>();
-        try{
+        try {
             String stm = "SELECT * FROM collection";
             statement = connection.prepareStatement(stm);
             sp = statement.executeQuery();
-            while(sp.next()){
+            while (sp.next()) {
                 SpaceMarine spaceMarine = new SpaceMarine();
                 spaceMarine.setId(sp.getInt("id"));
                 ids.add(sp.getInt("id"));
@@ -80,22 +81,22 @@ public class TableCollectionManager {
                 spaceMarine.setChapter(new Chapter(sp.getString("chapter_name"), sp.getString("chapter_world")));
                 spaceMarine.setCreationDate(ZonedDateTime.parse(sp.getString("creationDate")));
                 spaceMarines.add(spaceMarine);
-                count+=1;
-                System.out.println("SpaceMarine number "+ count + " was added to the collection");
+                count += 1;
+                System.out.println("SpaceMarine number " + count + " was added to the collection");
 
             }
             return spaceMarines;
 
 
-        }catch (Exception e){
-            System.out.println("SpaceMarine wasn't received: "+ e);
+        } catch (Exception e) {
+            System.out.println("SpaceMarine wasn't received: " + e);
         }
         return spaceMarines;
     }
 
-    public void clearObjects(int user_id){
+    public void clearObjects(int user_id) {
         PreparedStatement statement;
-        try{
+        try {
             String stm = "DELETE FROM collection WHERE user_id = ?";
             statement = connection.prepareStatement(stm);
             statement.setInt(1, user_id);
@@ -107,53 +108,51 @@ public class TableCollectionManager {
         }
     }
 
-    public void addIfMax(SpaceMarine spaceMarine, int user_id){
+    public void addIfMax(SpaceMarine spaceMarine, int user_id) {
         PreparedStatement statement;
         double maxHealth = 0;
-        try{
+        try {
             String stm = "SELECT * FROM collection ORDER BY health DESC LIMIT 1";
             statement = connection.prepareStatement(stm);
             ResultSet resultSet = statement.executeQuery();
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 maxHealth = resultSet.getDouble("health");
             }
-            if (spaceMarine.getHealth() > maxHealth){
+            if (spaceMarine.getHealth() > maxHealth) {
                 insertSpaceMarine(spaceMarine, user_id);
-            }
-            else {
+            } else {
                 console.writeStr("Oops, the health field of the new element is less than the maximum one in the collection");
             }
 
         } catch (SQLException e) {
-            System.out.println("Object wasn't added: "+e);
+            System.out.println("Object wasn't added: " + e);
         }
     }
 
-    public void removeById (int user_id, int id){
+    public void removeById(int user_id, int id) {
         PreparedStatement statement;
-        try{
+        try {
             String stm = "SELECT id FROM collection WHERE id = ? and user_id = ?";
             statement = connection.prepareStatement(stm);
             statement.setInt(1, id);
             statement.setInt(2, user_id);
 
             ResultSet set = statement.executeQuery();
-            if (set.next()){
+            if (set.next()) {
                 removeObject(user_id, id);
-                console.writeStr("SpaceMarine with id "+ id + " successfully deleted");
-            }
-            else {
+                console.writeStr("SpaceMarine with id " + id + " successfully deleted");
+            } else {
                 console.writeStr("SpaceMarine with this id was not found or you do not have access to a collection item with this id");
             }
 
         } catch (SQLException e) {
-            System.out.println("Something went wrong: "+e);
+            System.out.println("Something went wrong: " + e);
         }
     }
 
-    public void removeObject(int user_id, int id){
+    public void removeObject(int user_id, int id) {
         PreparedStatement statement;
-        try{
+        try {
             String stm = "DELETE  FROM collection WHERE user_id = ? AND id = ?";
             statement = connection.prepareStatement(stm);
             statement.setInt(1, user_id);
@@ -165,17 +164,17 @@ public class TableCollectionManager {
         }
     }
 
-    public void removeLower(double health, int user_id){
+    public void removeLower(double health, int user_id) {
         PreparedStatement statement;
         int counter = 0;
-        try{
+        try {
             String stm = "SELECT * FROM collection WHERE user_id = ? AND health < ?";
             statement = connection.prepareStatement(stm);
             statement.setInt(1, user_id);
             statement.setDouble(2, health);
             ResultSet set = statement.executeQuery();
 
-            while (set.next()){
+            while (set.next()) {
                 removeObject(user_id, set.getInt("id"));
                 counter += 1;
             }
@@ -186,7 +185,7 @@ public class TableCollectionManager {
         }
     }
 
-    public String getClientIds( int user_id){
+    public String getClientIds(int user_id) {
         PreparedStatement statement;
         String ids = "";
         try {
@@ -195,8 +194,8 @@ public class TableCollectionManager {
             statement.setInt(1, user_id);
 
             ResultSet set = statement.executeQuery();
-            while (set.next()){
-                ids += String.valueOf(set.getInt("id"))+" ";
+            while (set.next()) {
+                ids += String.valueOf(set.getInt("id")) + " ";
             }
             return ids;
         } catch (SQLException e) {
@@ -204,10 +203,10 @@ public class TableCollectionManager {
         }
     }
 
-    public void updateElement(int id, SpaceMarine spaceMarine){
+    public void updateElement(int id, SpaceMarine spaceMarine) {
         PreparedStatement statement;
         System.out.println(id);
-        try{
+        try {
             String stm = "UPDATE collection SET name = ?, x = ?, y = ?, health = ?," +
                     "heartCount = ?, loyal = ?, meleeWeapon = ?, chapter_name = ?," +
                     "chapter_world = ?, creationDate =  ? WHERE id =?";
@@ -226,14 +225,14 @@ public class TableCollectionManager {
             statement.setInt(11, id);
 
             statement.executeUpdate();
-            console.writeStr("Element with id = "+ id + " successfully updated");
+            console.writeStr("Element with id = " + id + " successfully updated");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void setConsole(ServerConsole console){
+    public void setConsole(ServerConsole console) {
         this.console = console;
     }
 }

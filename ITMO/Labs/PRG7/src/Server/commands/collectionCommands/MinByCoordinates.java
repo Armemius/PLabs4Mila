@@ -6,8 +6,7 @@ import Common.exceptions.WrongArgumentsException;
 import Server.managers.collectionManagers.CollectionManager;
 
 public class MinByCoordinates extends Command {
-    private CollectionManager collectionManager;
-
+    private final CollectionManager collectionManager;
 
     public MinByCoordinates(CollectionManager collectionManager, Console console) {
         super("min_by_coordinates", "finding the element with the smallest value of the coordinates field", console);

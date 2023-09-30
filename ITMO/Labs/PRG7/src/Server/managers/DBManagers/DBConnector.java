@@ -6,30 +6,31 @@ import java.sql.SQLException;
 
 public class DBConnector {
     // fields for driver
-    private String URL;
-    private String username;
-    private String password;
+    private final String URL;
+    private final String username;
+    private final String password;
     private Connection connection;
 
-    //object of connector
-    public DBConnector (){
+    // object of connector
+    public DBConnector() {
         //local db
-        this.URL = "jdbc:postgresql://localhost:5432/studs";
-        this.username ="postgres";
+        this.URL = "jdbc:postgresql://77.234.216.45:5432/studs"; // TODO Go back to localhost
+        this.username = "postgres";
         this.password = "Shaurma8982";
     }
+
     // method for initialize connection
-    public void connect(){
-        try{
+    public void connect() {
+        try {
             connection = DriverManager.getConnection(URL, username, password);
             System.out.println("Connection established");
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Connection error");
         }
 
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         return connection;
     }
 

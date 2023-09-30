@@ -11,21 +11,21 @@ import Server.managers.collectionManagers.CommandsManager;
 import java.io.IOException;
 
 public class ServerManager {
-    private Server server;
+    private final Server server;
     private static CollectionManager collectionManager;
     private static ServerConsole console;
     private ReceiveManager receiveM;
     private SendManager sendM;
     private boolean workingState = true;
     private static UsersManager usersManager;
-    private TableCollectionManager tableCollectionManager;
+    private final TableCollectionManager tableCollectionManager;
 
     //literally server manager
     public ServerManager(Server server, CollectionManager collectionManager, UsersManager usersManager, TableCollectionManager tableCollectionManager) {
         this.server = server;
-        this.collectionManager = collectionManager;
-        this.console = collectionManager.getConsole();
-        this.usersManager = usersManager;
+        ServerManager.collectionManager = collectionManager;
+        console = collectionManager.getConsole();
+        ServerManager.usersManager = usersManager;
         this.tableCollectionManager = tableCollectionManager;
     }
 
@@ -79,7 +79,7 @@ public class ServerManager {
     }
 
     public void setConsole(ServerConsole console){
-        this.console = console;
+        ServerManager.console = console;
     }
 }
 

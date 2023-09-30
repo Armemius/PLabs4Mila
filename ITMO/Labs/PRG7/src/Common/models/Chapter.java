@@ -13,12 +13,10 @@ public class Chapter implements Serializable {
         this.world = world; //not null, can be empty
     }
 
-
     private String name;
+    private final String world;
 
-    private String world;
-
-    public String getName(){
+    public String getName() {
         return name;
     }
 
@@ -28,7 +26,7 @@ public class Chapter implements Serializable {
                 throw new WrongArgumentsException("Name can't be null or empty string");
             }
             this.name = name;
-        } catch (WrongArgumentsException e){}
+        } catch (WrongArgumentsException ignore) {}
     }
 
     public String getWorld() {
@@ -45,24 +43,25 @@ public class Chapter implements Serializable {
 
         }
     }
+
     /**
      * Data matcher from input string
+     *
      * @param string
      * @return
      */
-    public static String matchText (String string){
+    public static String matchText(String string) {
         Matcher matcher = Pattern.compile("'([^']*)'").matcher(string);
         String text = null;
-        while (matcher.find()){
+        while (matcher.find()) {
             text = matcher.group(1);
         }
         return text;
     }
 
-    public boolean argsCheckChapter(){
-        return name != null && name !="\\s*" && world != null;
+    public boolean argsCheckChapter() {
+        return name != null && name != "\\s*" && world != null;
     }
-
 
 
     @Override
