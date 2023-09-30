@@ -24,7 +24,7 @@ public class MinByCoordinates extends Command {
             }
             collectionManager.findMinElementByCoordinates();
         } catch (WrongArgumentsException e) {
-            console.writeStr(e.toString() + ": min_by_coordinates command doesn't need additional arguments");
+            console.writeStr(e + ": min_by_coordinates command doesn't need additional arguments");
         }
     }
 }

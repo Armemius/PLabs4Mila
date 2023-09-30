@@ -27,6 +27,6 @@ public class Add extends CompoundCommand {
     @Override
     public void execute(String[] strings) {
         tableCollectionManager.insertSpaceMarine(spaceMarine, Integer.parseInt(strings[0]));
-        collectionManager.setCollection(tableCollectionManager.readSpaceMarines());
+        collectionManager.refreshMarines(tableCollectionManager);
     }
 }

@@ -23,10 +23,10 @@ public class Clear extends Command {
                 throw new WrongArgumentsException();
             }
             tableCollectionManager.clearObjects(Integer.parseInt(strings[0]));
-            collectionManager.setCollection(tableCollectionManager.readSpaceMarines());
+            collectionManager.refreshMarines(tableCollectionManager);
             console.writeStr("Collection was cleared");
         } catch (WrongArgumentsException e) {
-            console.writeStr(e.toString() + ": clear command doesn't need additional arguments");
+            console.writeStr(e + ": clear command doesn't need additional arguments");
         }
     }
 }

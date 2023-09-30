@@ -30,6 +30,6 @@ public class Update extends CompoundCommand {
         System.out.println(strings[1]);
         int id = Integer.parseInt(strings[0]);
         tableCollectionManager.updateElement(Integer.parseInt(strings[0]), spaceMarine);
-        collectionManager.setCollection(tableCollectionManager.readSpaceMarines());
+        collectionManager.refreshMarines(tableCollectionManager);
     }
 }

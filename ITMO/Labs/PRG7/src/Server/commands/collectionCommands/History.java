@@ -21,7 +21,7 @@ public class History extends Command {
             }
             collectionManager.getHistory();
         } catch (WrongArgumentsException e) {
-            console.writeStr(e.toString() + ": history command doesn't need additional arguments");
+            console.writeStr(e + ": history command doesn't need additional arguments");
         }
     }
 }

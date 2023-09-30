@@ -34,7 +34,7 @@ public class AddIfMax extends CompoundCommand {
             }
         }
         tableCollectionManager.addIfMax(spaceMarine, Integer.parseInt(strings[0]));
-        collectionManager.setCollection(tableCollectionManager.readSpaceMarines());
+        collectionManager.refreshMarines(tableCollectionManager);
     }
 }
 

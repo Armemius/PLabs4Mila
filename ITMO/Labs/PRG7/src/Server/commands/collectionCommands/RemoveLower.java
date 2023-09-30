@@ -33,6 +33,6 @@ public class RemoveLower extends CompoundCommand {
             }
         }
         tableCollectionManager.removeLower(spaceMarine.getHealth(), Integer.parseInt(strings[0]));
-        collectionManager.setCollection(tableCollectionManager.readSpaceMarines());
+        collectionManager.refreshMarines(tableCollectionManager);
     }
 }

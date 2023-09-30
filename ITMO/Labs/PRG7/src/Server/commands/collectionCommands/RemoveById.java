@@ -24,7 +24,7 @@ public class RemoveById extends Command {
             }
             if (isInteger(strings[0])) {
                 tableCollectionManager.removeById(Integer.parseInt(strings[1]), Integer.parseInt(strings[0]));
-                collectionManager.setCollection(tableCollectionManager.readSpaceMarines());
+                collectionManager.refreshMarines(tableCollectionManager);
             } else {
                 console.writeStr("The argument must be an integer");
             }

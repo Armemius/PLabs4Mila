@@ -20,10 +20,13 @@ public class ServerMain {
         TableCollectionManager  tableCollectionManager = new TableCollectionManager(dbConnector.getConnection(), serverConsole);
         CollectionManager collectionManager = new CollectionManager(tableCollectionManager.readSpaceMarines(), serverConsole);
 
+//        Use CREATE TABLE IF NOT EXISTS
+//        ⛔⛔⛔ HARAM ⛔⛔⛔
 //        TableCreator.deleteTable(dbConnector.getConnection(), "collection");
 //        TableCreator.deleteTable(dbConnector.getConnection(), "users");
-//        TableCreator.createUsersTable(dbConnector.getConnection());
-//        TableCreator.createCollectionTable(dbConnector.getConnection());
+
+        TableCreator.createUsersTable(dbConnector.getConnection());
+        TableCreator.createCollectionTable(dbConnector.getConnection());
 
 
         int port = 6789;

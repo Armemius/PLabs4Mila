@@ -3,9 +3,12 @@ package Server.managers.collectionManagers;
 import Common.consoles.Console;
 import Common.consoles.ServerConsole;
 import Common.models.SpaceMarine;
+import Server.managers.DBManagers.TableCollectionManager;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static Server.managers.collectionManagers.CommandsManager.history;
 
@@ -13,6 +16,7 @@ public class CollectionManager {
     private ServerConsole console;
     private final LocalDateTime creationDate;
     private static HashSet<SpaceMarine> fileCollection;
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     public CollectionManager() {
 
@@ -39,10 +43,12 @@ public class CollectionManager {
      * @param spaceMarines The space marines
      */
     public HashSet<SpaceMarine> setCollection(HashSet<SpaceMarine> spaceMarines) {
+        lock.writeLock().lock();
         fileCollection = spaceMarines;
 //        for (SpaceMarine sp : fileCollection){
 //            System.out.println(sp);
 //        }
+        lock.writeLock().unlock();
         return fileCollection;
     }
 
@@ -53,12 +59,14 @@ public class CollectionManager {
      * @param spaceMarine The space marine
      */
     public void updateCollectionElement(int id, SpaceMarine spaceMarine) {
+        lock.readLock().lock();
         for (SpaceMarine sm : fileCollection) {
             if (sm.getId() == id) {
                 sm.updateSpaceMarine(spaceMarine);
                 console.writeStr(spaceMarine.getName() + " with id = " + id + " has been updated");
             }
         }
+        lock.readLock().unlock();
     }
 
     /**
@@ -72,14 +80,15 @@ public class CollectionManager {
      * Collection elements printer
      */
     public void printCollection() {
+        lock.readLock().lock();
         if (!(fileCollection.size() > 0)) {
             console.writeStr("Collection is empty");
         }
         for (SpaceMarine spaceMarine : fileCollection) {
             // System.out.println(spaceMarine.toString());
             console.writeStr(spaceMarine.toString());
-
         }
+        lock.readLock().unlock();
     }
 
 
@@ -87,6 +96,7 @@ public class CollectionManager {
      * List of last eleven commands getter
      */
     public void getHistory() {
+        lock.readLock().lock();
         List<String> tmp = history;
         if (tmp.size() == 0) {
             console.writeStr("History is empty");
@@ -95,25 +105,36 @@ public class CollectionManager {
                 console.writeStr(command);
             }
         }
+        lock.readLock().unlock();
     }
 
     /**
      * Find and print collection element with minimum coordinates value
      */
     public void findMinElementByCoordinates() {
+        lock.readLock().lock();
         SpaceMarine minCoordinatesSpaceMarine = Collections.min(fileCollection, new SpaceMarine.SpaceMarineCoordinatesComparator());
         console.writeStr(minCoordinatesSpaceMarine.toString());
+        lock.readLock().unlock();
     }
 
     /**
      * Sort and print the lis of collection elements health values
      */
     public void printSortedHealthFields() {
+        lock.readLock().lock();
         ArrayList<SpaceMarine> tmp = new ArrayList<>(fileCollection);
         tmp.sort(new SpaceMarine.SpaceMarineHealthComparator());
         for (int i = tmp.size() - 1; i > -1; i--) {
             console.writeStr(String.valueOf(tmp.get(i).getHealth()));
         }
+        lock.readLock().unlock();
+    }
+
+    public void refreshMarines(TableCollectionManager tableCollectionManager) {
+        lock.writeLock().lock();
+        setCollection(tableCollectionManager.readSpaceMarines());
+        lock.writeLock().unlock();
     }
 
 //    /**
@@ -136,6 +157,7 @@ public class CollectionManager {
      * @param spaceMarine
      */
     public void removeLowerHealth(SpaceMarine spaceMarine) {
+        lock.writeLock().lock();
         int counter = 0;
         Iterator<SpaceMarine> iterator = fileCollection.iterator();
         while (iterator.hasNext()) {
@@ -146,15 +168,18 @@ public class CollectionManager {
             }
         }
         console.writeStr("Items were successfully deleted: " + counter);
+        lock.writeLock().unlock();
     }
 
     /**
      * Displaying information about the collection
      */
     public void getInfo() {
+        lock.readLock().lock();
         console.writeStr("Collection type: " + fileCollection.getClass().getName());
         console.writeStr("Creation date: " + creationDate);
         console.writeStr("Collection size: " + fileCollection.size());
+        lock.readLock().unlock();
     }
 
     public ServerConsole getConsole() {

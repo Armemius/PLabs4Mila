@@ -11,19 +11,19 @@ public class TableCreator {
     public static void createCollectionTable(Connection connection) {
         Statement statement;
         try {
-            String query = "CREATE TABLE collection" +
+            String query = "CREATE TABLE IF NOT EXISTS collection" +
                     " (" +
                     "id serial PRIMARY KEY not null," +
-                    "name varchar(50)," +
+                    "name varchar," +
                     "x bigint," +
                     "y double precision," +
                     "health float," +
                     "heartCount integer," +
                     "loyal boolean," +
-                    "meleeWeapon varchar(50)," +
-                    "chapter_name varchar(50)," +
-                    "chapter_world varchar(50)," +
-                    "creationDate varchar(200)," +
+                    "meleeWeapon varchar," +
+                    "chapter_name varchar," +
+                    "chapter_world varchar," +
+                    "creationDate varchar," +
                     "user_id int, " + "FOREIGN KEY (user_id) REFERENCES users (user_id) " +
                     ")";
             statement = connection.createStatement();
@@ -37,9 +37,9 @@ public class TableCreator {
     public static void createUsersTable(Connection connection) {
         Statement statement;
         try {
-            String stm = "CREATE TABLE Users " +
-                    "(" + "user_id serial PRIMARY KEY not null," +
-                    "username varchar(100)," + "password varchar(64)" + ")";
+            String stm = "CREATE TABLE IF NOT EXISTS Users " +
+                    "(user_id serial PRIMARY KEY not null," +
+                    "username varchar NOT NULL , password varchar NOT NULL)";
             statement = connection.createStatement();
             statement.execute(stm);
             System.out.println("Table \"Users\" created");
